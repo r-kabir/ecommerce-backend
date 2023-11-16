@@ -1,4 +1,5 @@
 const emailValidation = require("../helpers/emailValidation")
+const User = require("../models/userSchema")
 
 let registrationController = (req,res)=>{
     let {name, email, password} = req.body
@@ -14,7 +15,15 @@ let registrationController = (req,res)=>{
                 return res.send("Invalid Email")
             }
         }
-        res.send("Registration Done")
+        let user = new User({
+            name: name,
+            email: email,
+            password: password
+
+        })
+        user.save()
+
+        res.send(user)
     }
 }
 
