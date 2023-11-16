@@ -1,5 +1,6 @@
 const emailValidation = require("../helpers/emailValidation")
 const User = require("../models/userSchema")
+const bcrypt = require('bcrypt');
 
 let registrationController = async (req,res)=>{
     let {name, email, password} = req.body
@@ -17,15 +18,15 @@ let registrationController = async (req,res)=>{
                     return res.send("Invalid Email")
                 }
             }
-            let user = new User({
-                name: name,
-                email: email,
-                password: password
-    
-            })
-            user.save()
-    
-            res.send(user)
+            bcrypt.hash(password, 8, function(err, hash) {
+                let user = new User({
+                    name: name,
+                    email: email,
+                    password: hash
+                })
+                user.save()
+                res.send(user)
+            });
         }
     }else{
         res.send("Email Already Exists")
