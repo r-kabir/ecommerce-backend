@@ -1,4 +1,5 @@
 const emailValidation = require("../helpers/emailValidation")
+const passwordValidation = require("../helpers/passwordValidation")
 const User = require("../models/userSchema")
 const bcrypt = require('bcrypt');
 
@@ -16,6 +17,11 @@ let registrationController = async (req,res)=>{
             if(email){
                 if(!emailValidation(email)){
                     return res.send("Invalid Email")
+                }
+            }
+            if(password){
+                if(!passwordValidation(password)){
+                    return res.send("6-12 characters, no space, one digit, one lowercase, one uppercase & one special character requirrd")
                 }
             }
             bcrypt.hash(password, 8, function(err, hash) {
