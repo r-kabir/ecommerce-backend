@@ -16,6 +16,10 @@ const userSchema = new Schema({
     },
     otp:{
         type:String
+    },
+    verify:{
+        type:String,
+        default: false
     }
 })
 
