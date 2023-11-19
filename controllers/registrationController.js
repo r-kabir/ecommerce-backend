@@ -3,6 +3,7 @@ const passwordValidation = require("../helpers/passwordValidation")
 const User = require("../models/userSchema")
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer")
+const otpGenerator = require('otp-generator')
 
 let registrationController = async (req,res)=>{
     let {name, email, password} = req.body
@@ -25,11 +26,13 @@ let registrationController = async (req,res)=>{
                     return res.send("6-12 characters, no space, one digit, one lowercase, one uppercase & one special character requirrd")
                 }
             }
+            let otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
             bcrypt.hash(password, 8, async function(err, hash) {
                 let user = new User({
                     name: name,
                     email: email,
-                    password: hash
+                    password: hash,
+                    otp: otp
                 })
                 user.save()
                 const transporter = nodemailer.createTransport({
@@ -43,7 +46,7 @@ let registrationController = async (req,res)=>{
                     from:"kabir.mern2201@gmail.com",
                     to:"taposkabir@yahoo.com",
                     subject:"Verify Your Email",
-                    html:"<p><b>Hello</b>to myself</p>"
+                    html:`<div>Hello, your OTP is <h2>${otp}<h2/> </div>`
                 })
                 res.send(user)
             });
