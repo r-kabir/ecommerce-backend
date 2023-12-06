@@ -43,8 +43,8 @@ let registrationController = async (req,res)=>{
                     }
                 })
                 const info = await transporter.sendMail({
-                    from:"kabir.mern2201@gmail.com",
-                    to:"taposkabir@yahoo.com",
+                    from: process.env.BASE_EMAIL,
+                    to:email,
                     subject:"Verify Your Email",
                     html:`<div>Hello, your OTP is <h2>${otp}<h2/> </div>`
                 })
